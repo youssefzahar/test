@@ -18,7 +18,7 @@ const stripe = require("stripe")('sk_test_51MDmEvEbHfjP9Lzb79VCDTAHz5MFshTKhUFv7
 
 //////
 
-mongoose.connect('mongodb://127.0.0.1:27017/CarNote', {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb://mongo/CarNote', {useNewUrlParser: true, useUnifiedTopology: true})
 
 const db = mongoose.connection
 
@@ -37,6 +37,7 @@ app.use(bodyparser.urlencoded({extended: true}))
 app.use(bodyparser.json())
 app.use('/uploads',express.static('uploads'))
 const Port = process.env.Port || 3000
+const hostname = "0.0.0.0"
 
 ///////////////////////////////////////////////////////
 
@@ -64,38 +65,9 @@ app.post("/create-payment-intent", async (req, res) => {
 
 /////////////////////////////////////////////////////
 
-app.listen(Port, () =>{
-  console.log(`Server is running on port ${Port}`)
+app.listen(Port, hostname ,() =>{
+  console.log(`Server is running on ${hostname}:${Port}`)
 })
-
-/*
-
-const options = {
-    definition: {
-      openapi: "3.0.0",
-      info: {
-        title: "Library API",
-        version: "1.0.0",
-        description: "A simple Express Library API",
-        termsOfService: "http://example.com/terms/",
-        contact: {
-          name: "API Support",
-          url: "http://www.exmaple.com/support",
-          email: "support@example.com",
-        },
-      },
-  
-      servers: [
-        {
-          url: "http://localhost:3000",
-          description: "My API Documentation",
-        },
-      ],
-    },
-    apis: ["./Routes/*.js"],
-  };
-  */
-  //const specs = swaggerJSDoc(options);
 
   app.use('/swagger/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
   app.use('/api/user', UserRoute)
